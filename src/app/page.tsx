@@ -4,11 +4,12 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import api from "../lib/axios"
 import Image from "next/image";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const loginUser = useMutation({
     mutationFn: () => api.postLogin({
@@ -16,6 +17,7 @@ export default function Home() {
       password: password
     }),
     onSuccess: (res) => {
+      router.push("/app")
     },
   });
 
