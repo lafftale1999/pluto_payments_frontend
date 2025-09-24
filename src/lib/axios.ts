@@ -26,8 +26,12 @@ const api = {
     return data; 
     },
     getInvoices: async () => {
-        const { data } = await axios.get("api/account/get_invoices");
+        const { data } = await axios.get("/api/account/get_invoices");
         return data
+    },
+    getInvoiceById: async (id: string) => {
+        const { data } = await axios.get("/api/account/get_invoice/" + id);
+        return data;
     }
 };
 

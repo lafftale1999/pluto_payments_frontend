@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PLUTO PAYMENTS – FRONTEND
+A lightweight frontend application for a credit card provider that enables users to log in, view invoices, manage their account, and interact with the Pluto Payments ecosystem. The application is built with **Next.js** and serves as the user-facing interface for the system. It communicates with the backend through secure session-based requests.  
 
-## Getting Started
+For the full project, check out the main repository: [Pluto Payments](https://github.com/lafftale1999/pluto_payments)  
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## About
+The application contains the following functionality:  
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Framework & Tools:**  
+- Built with **Next.js** (React + TypeScript)  
+- **Axios** for API communication  
+- **TanStack Query (React Query)** for data fetching and caching  
+- **TailwindCSS** for styling  
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Features:**  
+- Session-based login system using backend-issued cookies  
+- Secure API communication with the backend  
+- Account overview: see card, invoices, and account details  
+- Invoice details page with transaction history  
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Security:**  
+- Session cookie provided by backend after successful login  
+- Automatic revalidation of session on protected routes  
+- Logout mechanism clears session and prevents further access  
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Usage
+After setup, the frontend will provide the following main user flows:  
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Login**  
+  Enter your credentials. On success, a session cookie will be created.  
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Logout**  
+  Ends the current session and clears frontend state.  
 
-## Deploy on Vercel
+- **Account Overview**  
+  Displays information about the logged-in account and associated card.  
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Invoices**  
+  Overview of invoices connected to the user.  
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Invoice Details**  
+  Detailed view of one invoice including transactions.  
+
+The frontend communicates with the backend through the following endpoints:  
+
+- `/api/auth/login` – Handles user login and session cookie creation  
+- `/api/auth/logout` – Destroys session and clears cookie  
+- `/api/auth/account/*` – Accesses account, card, and invoice information  
+
+---
+
+## Dependencies
+- **Node.js (v18+)**  
+  Required to run and build the application.  
+
+- **npm** or **yarn**  
+  Package manager for installing dependencies.  
+
+---
+
+## Build project
+1. **Clone project**  
+   git clone https://github.com/lafftale1999/pluto_payments_frontend.git
+   cd pluto_payments_frontend
+
+2. **Install dependencies**  
+   npm install
+
+3. **Run the program localy**  
+   npm run dev
+
+## About us
+This project has been created by [`Maksym`](https://github.com/Zar000), [`Johann`](https://github.com/hager3737) and [`Carl`](https://github.com/lafftale1999).

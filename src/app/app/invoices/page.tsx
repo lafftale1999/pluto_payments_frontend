@@ -1,8 +1,9 @@
-
+// app/invoices/page.tsx
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
+import Link from "next/link";
 import React from "react";
 
 const fmtSEK = (n: number) =>
@@ -26,32 +27,40 @@ function StatCard({ label, value }: { label: string; value: React.ReactNode }) {
 }
 
 export default function InvoicesPage() {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ["invoices"],
-    queryFn: api.getMain,
+    queryFn: api.getInvoices,
   });
 
+  if(isSuccess) {
+    console.log(data)
+  }
+
   const payload: any = data && (data as any).data ? (data as any).data : data;
+  const account = payload?.account ?? {};
+  const firstName: string | undefined = account?.firstName;
 
-  const invoices: any[] = Array.isArray(payload?.invoiceDTOs) ? payload.invoiceDTOs : [];
-
+  const invoices: any[] = Array.isArray(payload?.invoices) ? payload.invoices : [];
   const sorted = invoices
     .slice()
-    .sort((a, b) => new Date(b.invoiceDate).getTime() - new Date(a.invoiceDate).getTime());
+    .sort((a, b) => new Date(b?.invoiceDate ?? 0).getTime() - new Date(a?.invoiceDate ?? 0).getTime());
 
   const latest = sorted[0];
   const totalSum = sorted.reduce((sum, inv) => sum + (Number(inv?.sum) || 0), 0);
 
   return (
     <div className="w-full">
-      <h1 className="mb-2 text-3xl font-extrabold text-primary">Invoices</h1>
+      <h1 className="mb-2 text-3xl font-extrabold text-primary">Fakturor</h1>
+      <p className="mb-6 text-primary/70">{firstName ? `Welcome, ${firstName}!` : ""}</p>
 
+      {/* Översikt */}
       <div className="mb-6 grid gap-4 md:grid-cols-3">
         <StatCard label="Antal fakturor" value={isLoading ? "…" : sorted.length} />
         <StatCard label="Totalsumma" value={isLoading ? "…" : fmtSEK(totalSum)} />
-        <StatCard label="Senaste faktura" value={isLoading || !latest ? "—" : fmtDate(latest.invoiceDate)} />
+        <StatCard label="Senaste faktura" value={isLoading || !latest ? "—" : fmtDate(latest?.invoiceDate)} />
       </div>
 
+      {/* Tabell – klickbar rad om id finns */}
       <div className="overflow-hidden rounded-2xl border border-primary/10 bg-secondary/70">
         <div className="grid grid-cols-12 border-b border-primary/10 bg-accent/40 px-4 py-3 text-sm font-semibold text-primary">
           <div className="col-span-4">Fakturadatum</div>
@@ -67,19 +76,37 @@ export default function InvoicesPage() {
           <div className="p-4 text-primary/60">Inga fakturor hittades.</div>
         ) : (
           <ul className="divide-y divide-primary/10">
-            {sorted.map((inv, i) => (
-              <li key={`${inv?.invoiceDate ?? "inv"}-${inv?.status ?? "st"}-${i}`} className="grid grid-cols-12 px-4 py-3 text-primary/90">
-                <div className="col-span-4">{fmtDate(inv?.invoiceDate)}</div>
-                <div className="col-span-4">
-                  <span className="inline-block rounded-xl border border-primary/20 bg-accent/50 px-2 py-1 text-xs font-semibold">
-                    {String(inv?.status ?? "-")}
-                  </span>
+            {sorted.map((inv, i) => {
+              const id = inv?.id ?? inv?.invoiceId; // <-- just här förväntar vi oss ett ID
+              const row = (
+                <div className="grid grid-cols-12 px-4 py-3 text-primary/90">
+                  <div className="col-span-4">{fmtDate(inv?.invoiceDate)}</div>
+                  <div className="col-span-4">
+                    <span className="inline-block rounded-xl border border-primary/20 bg-accent/50 px-2 py-1 text-xs font-semibold">
+                      {String(inv?.status ?? "-")}
+                    </span>
+                  </div>
+                  <div className="col-span-4 text-right font-semibold">
+                    {typeof inv?.sum === "number" ? fmtSEK(inv.sum) : "-"}
+                  </div>
                 </div>
-                <div className="col-span-4 text-right font-semibold">
-                  {typeof inv?.sum === "number" ? fmtSEK(inv.sum) : "-"}
-                </div>
-              </li>
-            ))}
+              );
+
+              return (
+                <li
+                  key={`${inv?.invoiceDate ?? "inv"}-${inv?.status ?? "st"}-${i}`}
+                  className={id ? "cursor-pointer hover:bg-accent/30" : ""}
+                >
+                  {id ? (
+                    <Link href={`/app/invoices/${encodeURIComponent(String(id))}`} prefetch={false}>
+                      {row}
+                    </Link>
+                  ) : (
+                    row
+                  )}
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>
