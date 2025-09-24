@@ -25,6 +25,50 @@ The application contains the following functionality:
 - Automatic revalidation of session on protected routes  
 - Logout mechanism clears session and prevents further access  
 
+```java
+// POST /api/auth/login
+    // Checks if email + password are valid, creates a session and stores the user in it.
+    @PostMapping("/login")
+    public ResponseEntity<?> login(
+            @RequestBody LoginRequest loginRequest,
+            HttpServletRequest req,
+            HttpServletResponse res
+    ) {
+        // 1. Look up customer by email
+        Customer user = customerRepo.findByEmail(loginRequest.getEmail());
+        if (user == null) {
+            return ResponseEntity.status(401).body("Invalid credentials (email)");
+        }
+
+        // Password hashing goes here:
+        String hashedPassword = PlutoHasher.hashedString(loginRequest.getPassword());
+
+        // 2. Verify password (no hashing yet!)
+        if (!user.getPassword().equals(hashedPassword)) {
+            return ResponseEntity.status(401).body("Invalid credentials");
+        }
+
+        // 3. Create Spring Security Authentication object for this user
+        var auth = new UsernamePasswordAuthenticationToken(
+                user.getEmail(), // principal (username/email)
+                null,            // no credentials stored
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")) // user role
+        );
+
+        // 4. Put authentication into SecurityContext
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(auth);
+        SecurityContextHolder.setContext(context);
+
+        // 5. Ensure session exists and save context to it
+        req.getSession(true);
+        new HttpSessionSecurityContextRepository().saveContext(context, req, res);
+
+        // 6. Return success
+        return ResponseEntity.ok(Map.of("message", "Login ok"));
+    }
+```
+
 ---
 
 ## Usage
