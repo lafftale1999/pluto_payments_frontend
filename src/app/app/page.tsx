@@ -7,18 +7,18 @@ import api from "@/lib/axios";
 type Tx = {
   transactionId: number;
   deviceCompanyName: string;
-  transactionDate: string; // ISO
+  transactionDate: string; 
   transactionCost: number;
 };
 
 type Card = {
   cardNum: string;
-  expiryDate: string; // ISO
+  expiryDate: string; 
   active: boolean;
 };
 
 type InvoiceDTO = {
-  invoiceDate: string; // ISO
+  invoiceDate: string; 
   status: string;
   sum: number;
 };
@@ -31,7 +31,7 @@ type MainResponse = {
   points: number;
   creditLimit: number;
   creditUsed: number;
-  balance?: number; // kan finnas (limit - used)
+  balance?: number; 
   card?: Card;
   invoiceDTOs?: InvoiceDTO[];
   transactions?: Tx[];
@@ -79,10 +79,9 @@ const fmtDate = (iso: string | undefined) =>
 export default function AppPage() {
   const { data, isLoading, isSuccess } = useQuery({
     queryKey: ["me"],
-    queryFn: () => api.getMain(), // antas returnera JSON-objektet direkt
+    queryFn: () => api.getMain(), 
   });
 
-  // Hantera ev. axios-respons (ifall getMain() skulle returnera { data: ... }):
   const payload: MainResponse | undefined = (data && (data.data ?? data)) as MainResponse | undefined;
 
   const firstName = payload?.firstName ?? "";
@@ -96,7 +95,6 @@ export default function AppPage() {
   const points = payload?.points ?? 0;
 
   const invoices = payload?.invoiceDTOs ?? [];
-  // senaste faktura (om flera): ta den med senast datum
   const latestInvoice =
     invoices.length > 0
       ? [...invoices].sort(
@@ -108,7 +106,6 @@ export default function AppPage() {
 
   return (
     <div className="flex w-full flex-col items-center">
-      {/* Welcome under Navbar */}
       <div className="mb-6 w-full">
         <h1 className="text-2xl font-bold text-primary">
           {isLoading ? "Welcome ..." : `Welcome, ${firstName || displayName}!`}
@@ -195,7 +192,6 @@ export default function AppPage() {
         )}
       </div>
 
-      {/* Transactions */}
       <Section title="Transactions">
         {isLoading ? (
           <div className="h-32 animate-pulse rounded-xl bg-accent/60" />

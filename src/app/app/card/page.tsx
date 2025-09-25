@@ -86,7 +86,6 @@ export default function CardPage() {
               </div>
             </div>
 
-            {/* Right: quick facts */}
             <div className="flex flex-col justify-between rounded-2xl border border-primary/10 bg-accent/40 p-4">
               <div className="space-y-3">
                 <h3 className="text-lg font-bold text-primary">Card details</h3>
@@ -117,7 +116,6 @@ export default function CardPage() {
         ) : null}
       </section>
 
-      {/* Transactions */}
       <section className="rounded-2xl border border-primary/10 bg-accent/50 p-6 shadow-md backdrop-blur">
         <h2 className="mb-4 text-center text-2xl font-extrabold text-primary">Recent transactions</h2>
 

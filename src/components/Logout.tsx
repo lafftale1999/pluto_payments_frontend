@@ -17,7 +17,7 @@ export default function Logout() {
 
     return(
         <div>
-            <button onClick={() => logout.mutate()}>Sign out</button>
+            <button onClick={() => logout.mutate()} type="button">Sign out</button>
         </div>
     )
 }

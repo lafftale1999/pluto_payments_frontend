@@ -1,4 +1,4 @@
-// app/app/layout.tsx
+
 import Navbar from "@/components/Navbar";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -22,7 +22,6 @@ export default async function AppLayout({
           <Navbar />
         </div>
       </header>
-
       <main className="mx-auto w-full max-w-7xl px-4 pb-16 pt-6">
         {children}
       </main>

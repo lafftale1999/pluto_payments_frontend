@@ -1,4 +1,4 @@
-// app/invoices/page.tsx
+
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
@@ -53,14 +53,12 @@ export default function InvoicesPage() {
       <h1 className="mb-2 text-3xl font-extrabold text-primary">Fakturor</h1>
       <p className="mb-6 text-primary/70">{firstName ? `Welcome, ${firstName}!` : ""}</p>
 
-      {/* Översikt */}
       <div className="mb-6 grid gap-4 md:grid-cols-3">
         <StatCard label="Antal fakturor" value={isLoading ? "…" : sorted.length} />
         <StatCard label="Totalsumma" value={isLoading ? "…" : fmtSEK(totalSum)} />
         <StatCard label="Senaste faktura" value={isLoading || !latest ? "—" : fmtDate(latest?.invoiceDate)} />
       </div>
 
-      {/* Tabell – klickbar rad om id finns */}
       <div className="overflow-hidden rounded-2xl border border-primary/10 bg-secondary/70">
         <div className="grid grid-cols-12 border-b border-primary/10 bg-accent/40 px-4 py-3 text-sm font-semibold text-primary">
           <div className="col-span-4">Fakturadatum</div>
@@ -77,7 +75,7 @@ export default function InvoicesPage() {
         ) : (
           <ul className="divide-y divide-primary/10">
             {sorted.map((inv, i) => {
-              const id = inv?.id ?? inv?.invoiceId; // <-- just här förväntar vi oss ett ID
+              const id = inv?.id ?? inv?.invoiceId; 
               const row = (
                 <div className="grid grid-cols-12 px-4 py-3 text-primary/90">
                   <div className="col-span-4">{fmtDate(inv?.invoiceDate)}</div>
@@ -91,14 +89,14 @@ export default function InvoicesPage() {
                   </div>
                 </div>
               );
-
+//${encodeURIComponent(String(id))}
               return (
                 <li
                   key={`${inv?.invoiceDate ?? "inv"}-${inv?.status ?? "st"}-${i}`}
                   className={id ? "cursor-pointer hover:bg-accent/30" : ""}
                 >
                   {id ? (
-                    <Link href={`/app/invoices/${encodeURIComponent(String(id))}`} prefetch={false}>
+                    <Link href={`/app/invoices/` + id} prefetch={false}>
                       {row}
                     </Link>
                   ) : (

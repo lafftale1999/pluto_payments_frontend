@@ -15,6 +15,6 @@ export default function rewards() {
   }
 
     return(
-        <div>Hey</div>
+        <div className="flex justify-center bg-amber-300">Hey</div>
     )
 }

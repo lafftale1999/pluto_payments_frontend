@@ -56,7 +56,7 @@ export default function Navbar() {
           >
             Your account
           </Link>
-          <Logout />
+          <Logout></Logout>
         </div>
 
         {/* Simple mobile label (keep minimal) */}
