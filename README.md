@@ -150,6 +150,9 @@ export default api;
 ## Preview
 
 ![Pluto payments login](public/login.png)
+![Pluto payments dashboard](public/main-dashboard.png)
+![Pluto payments card](public/card.png)
+![Pluto payments personal](public/personal-info.png)
 
 ---
 
