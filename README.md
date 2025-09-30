@@ -147,6 +147,12 @@ export default api;
 
 ---
 
+## Preview
+
+![Pluto payments login](public/login.png)
+
+---
+
 ## Build project
 1. **Clone project**  
    git clone https://github.com/lafftale1999/pluto_payments_frontend.git
